@@ -1,6 +1,5 @@
-from .config import load_config, InvalidConfigError
+from .config import InvalidConfigError, load_config
 from .http import RSSFeedDownloader, RSSFeedError
-
 
 __all__ = [
     "load_config",
@@ -8,4 +7,3 @@ __all__ = [
     "RSSFeedDownloader",
     "RSSFeedError",
 ]
-
