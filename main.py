@@ -2,9 +2,24 @@ import argparse
 import json
 import logging
 
-from core import InvalidConfigError, load_config
+from core import InvalidConfigError, RSSFeedDownloader, RSSFeedError, load_config
 
 logger = logging.getLogger(__name__)
+
+
+def sync(selected_feeds: list[str], feed_groups: dict[str, list[str]]):
+    with RSSFeedDownloader() as downloader:
+        for name in selected_feeds:
+            urls = feed_groups.get(name)
+            if not urls:
+                logger.error(f"Feed '{name}' not found")
+                continue
+            for url in urls:
+                try:
+                    result = downloader.fetch_feed(url)
+                    print(result)
+                except RSSFeedError as e:
+                    logger.error(f"Feed group '{name}': {e}")
 
 
 def main():
@@ -29,7 +44,8 @@ def main():
         feeds = load_config()
         if args.name:
             print("\n".join(feeds.keys()))
-            return
+        if args.sync:
+            sync(args.sync, feeds)
     except FileNotFoundError as e:
         logger.error(f"Config missing: {e}")
         exit(1)
