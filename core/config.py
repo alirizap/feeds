@@ -53,7 +53,7 @@ def _validate_feeds_config(data: Any) -> bool:
                     raise InvalidConfigError(
                         f"Feed group '{feed_group['name']}': URL cannot be empty")
 
-def load_config() -> tuple[dict, str]:
+def load_config() -> dict[str, list[str]]:
     """Load and validate feeds configuration.
 
     Raises:
