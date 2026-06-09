@@ -1,9 +1,9 @@
 from .config import InvalidConfigError, load_config
-from .http import RSSFeedDownloader, RSSFeedError
+from .utils import print_item, print_items
 
 __all__ = [
     "load_config",
     "InvalidConfigError",
-    "RSSFeedDownloader",
-    "RSSFeedError",
+    "print_items",
+    "print_item",
 ]

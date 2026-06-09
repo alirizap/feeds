@@ -1,25 +1,42 @@
 import argparse
 import json
 import logging
+from typing import Any
 
-from core import InvalidConfigError, RSSFeedDownloader, RSSFeedError, load_config
+import feedparser
+from dateutil import parser as dtparser
+
+from core import InvalidConfigError, load_config, print_items
 
 logger = logging.getLogger(__name__)
 
 
+def parse_feed(group_name: str, url: str) -> list[dict[str, Any]]:
+    d = feedparser.parse(url)
+    items = []
+    for entry in d.entries:
+        items.append(
+            {
+                "group": group_name,
+                "title": entry.title,
+                "link": entry.link,
+                "pub_date": dtparser.parse(entry.published),
+            }
+        )
+
+    return items
+
+
 def sync(selected_feeds: list[str], feed_groups: dict[str, list[str]]):
-    with RSSFeedDownloader() as downloader:
-        for name in selected_feeds:
-            urls = feed_groups.get(name)
-            if not urls:
-                logger.error(f"Feed '{name}' not found")
-                continue
-            for url in urls:
-                try:
-                    result = downloader.fetch_feed(url)
-                    print(result)
-                except RSSFeedError as e:
-                    logger.error(f"Feed group '{name}': {e}")
+    for name in selected_feeds:
+        urls = feed_groups.get(name)
+        if not urls:
+            logger.error(f"Feed '{name}' no defined")
+            continue
+
+        for url in urls:
+            items = parse_feed(name, url)
+            print_items(items)
 
 
 def main():

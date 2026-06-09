@@ -1,11 +1,10 @@
 [
   {
     "name": "bugbounty",
-    "urls": [
-      "https://medium.com/feed/tag/bug-bounty",
-      "https://medium.com/feed/tag/security",
-      "https://medium.com/feed/tag/vulnerability",
-      "https://medium.com/feed/tag/cybersecurity"
-    ]
+    "urls": ["https://medium.com/feed/tag/bug-bounty"]
+  },
+  {
+    "name": "news",
+    "urls": ["https://news.ycombinator.com/rss"]
   }
 ]
